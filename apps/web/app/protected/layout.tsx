@@ -28,15 +28,15 @@ export default function ProtectedLayout({
               <EnvVarWarning />
             ) : (
               <>
-              <Suspense>
-                <AuthButton />
-              </Suspense>
-                            <Suspense>
-                <ShowUsage/>
-              </Suspense>
-              <Suspense>
-                <ShowUsageClient/>
-              </Suspense>
+                <Suspense>
+                  <AuthButton />
+                </Suspense>
+                <Suspense>
+                  <ShowUsage />
+                </Suspense>
+                <Suspense>
+                  <ShowUsageClient />
+                </Suspense>
               </>
             )}
           </div>

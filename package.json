@@ -1,4 +1,12 @@
 {
   "name": "rag-manual",
-  "private": true
+  "private": true,
+  "scripts": {
+    "dev:web": "pnpm --filter web dev",
+    "dev:api": "pnpm --filter api dev",
+    "dev": "concurrently -n web,api -c magenta,cyan \"pnpm dev:web\" \"pnpm dev:api\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
 }

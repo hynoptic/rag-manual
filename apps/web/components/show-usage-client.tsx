@@ -1,43 +1,31 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+import { useQuery } from "@tanstack/react-query";
+import { clientApiFetch } from "@/lib/api/client";
+
+type Usage = {
+  tokenCount: number;
+};
 
 export function ShowUsageClient() {
-  const [tokenCount, setTokenCount] = useState<number | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const {
+    data,
+    isPending,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["usage"],
+    queryFn: () => clientApiFetch<Usage>("/api/usage"),
+  });
 
-  useEffect(() => {
-    async function fetchUsage() {
-      const supabase = createClient();
-
-      const { data, error } = await supabase
-        .from("usage")
-        .select("token_count")
-        .single();
-
-      if (error || !data) {
-        console.error("Failed to fetch usage", error);
-        setError("Could not fetch tokens");
-        setLoading(false);
-        return;
-      }
-
-      setTokenCount(data.token_count);
-      setLoading(false);
-    }
-
-    fetchUsage();
-  }, []);
-
-  if (loading) {
+  if (isPending) {
     return <p>Loading tokens...</p>;
   }
 
-  if (error) {
-    return <p>{error}</p>;
+  if (isError) {
+    console.error("Failed to fetch usage", error);
+    return <p>Could not fetch tokens.</p>;
   }
 
-  return <p>Tokens: {tokenCount}</p>;
+  return <p>Tokens (client): {data.tokenCount}</p>;
 }
