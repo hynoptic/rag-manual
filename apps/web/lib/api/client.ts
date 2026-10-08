@@ -1,9 +1,11 @@
 import { createClient } from "@/lib/supabase/client";
 
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export async function clientApiFetch<T>(path: string): Promise<T> {
+export async function clientApiFetch<T>(
+  path: string,
+  options: RequestInit = {},
+): Promise<T> {
   const supabase = createClient();
 
   const {
@@ -15,7 +17,9 @@ export async function clientApiFetch<T>(path: string): Promise<T> {
   }
 
   const response = await fetch(`${API_URL}${path}`, {
+    ...options,
     headers: {
+      ...options.headers,
       Authorization: `Bearer ${session.access_token}`,
     },
   });

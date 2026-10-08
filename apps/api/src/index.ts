@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 
 import usageRouter from "./routes/usage.js";
+import uploadRouter from "./routes/upload.js";
 
 const app = express();
 const port = 3001;
@@ -18,6 +19,7 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/api/usage", usageRouter);
+app.use("/api/upload", uploadRouter);
 
 app.listen(port, () => {
   console.log(

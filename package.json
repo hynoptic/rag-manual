@@ -4,7 +4,8 @@
   "scripts": {
     "dev:web": "pnpm --filter web dev",
     "dev:api": "pnpm --filter api dev",
-    "dev": "concurrently -n web,api -c magenta,cyan \"pnpm dev:web\" \"pnpm dev:api\"",
+    "dev:parse-worker": "pnpm --filter api worker:parse",
+    "dev": "concurrently -n web,api,parse -c magenta,cyan,yellow \"pnpm dev:web\" \"pnpm dev:api\" \"pnpm dev:parse-worker\"",
     "rag": "pnpm --filter api exec tsx src/rag/dev.ts"
   },
   "devDependencies": {

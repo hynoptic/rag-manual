@@ -12,9 +12,10 @@ import { Document, DocumentInterface } from "@langchain/core/documents";
 
 import pc from "picocolors";
 import { ingestMarkdown } from "./ingestion/ingest-markdown.js";
-import { retrieveWithSectionExpansion } from "./ingestion/retrieve.js";
+import { retrieveExhaustive } from "./ingestion/retrieve.js";
+import { classifyIntent } from "./classification.js";
 
-const query = `Referring only to the context provided, name all the Syntakt's machines.`;
+const query = `Referring only to the context provided, what machines are available on the Syntakt's analogue tracks?`;
 
 console.clear();
 console.log("\n\n\n\n\n\n\n\n\n\n");
@@ -28,6 +29,24 @@ console.log(
 console.log("");
 
 console.log(pc.green(query));
+const classification = await classifyIntent(query);
+console.log("");
+
+
+console.log(
+  pc.bgMagenta(
+    pc.black(`          Intent          `),
+  ),
+);
+console.log("");
+console.log(pc.magenta(classification.intent));
+console.log(pc.magenta(classification.reason));
+console.log("");
+
+// {
+//   intent: "focused",
+//   reason: "Asks for the parameters of one specific machine."
+// }
 
 // const markdownPaths = [
 //   "/Users/jim/Documents/jimharris.io/rag-manual-all/rag-manual/apps/api/src/rag/docs/Syntakt-User-Manual_ENG_OS1.30_241016.md",
@@ -61,7 +80,7 @@ const embeddings = new OpenAIEmbeddings({
 });
 
 const documents = await ingestMarkdown(
-  "./src/rag/docs/Syntakt-User-Manual_ENG_OS1.42_260930.md",
+  "./src/rag/docs/Syntakt-User-Manual_ENG_OS1.42_260930-llamaparse.md",
 );
 
 const vectorStore = await MemoryVectorStore.fromDocuments(
@@ -77,7 +96,7 @@ const ragMiddleware = dynamicSystemPromptMiddleware(async (state) => {
   const userMessage = state.messages[0]!.content;
   const query = typeof userMessage === "string" ? userMessage : "";
 
-  const result = await retrieveWithSectionExpansion(
+  const result = await retrieveExhaustive(
     query,
     vectorStore,
     documents,
@@ -103,7 +122,7 @@ const ragMiddleware = dynamicSystemPromptMiddleware(async (state) => {
   });
 
   const docsContent = retrievedDocs.map((doc) => doc.pageContent).join("\n\n");
-  return `You are a helpful assistant answering user's questions about music technology such as synthesisers, grooveboxes, and drum machines, using only the provided context derived from equipment manuals, rather than accessing the web or relying on information from your model which may be out of date. ${docsContent}`;
+  return `You are a helpful assistant answering user's questions about music technology such as synthesisers, grooveboxes, and drum machines, using only the provided context derived from equipment manuals, rather than accessing the web or relying on information from your model which may be out of date. ${documents[0]}`;
 });
 
 const agent = createAgent({

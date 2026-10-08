@@ -1,7 +1,11 @@
 import type { Document } from "@langchain/core/documents";
 import type { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
 
-function samePath(a: string[], b: string[]) {
+function getPath(doc: Document): string[] {
+  return (doc.metadata.headingPath as string[] | undefined) ?? [];
+}
+
+function isSamePath(a: string[], b: string[]) {
   return (
     a.length === b.length &&
     a.every((part, index) => part === b[index])
@@ -20,7 +24,25 @@ function isDescendant(
   );
 }
 
-export async function retrieveWithSectionExpansion(
+function commonPrefix(paths: string[][]): string[] {
+  if (paths.length === 0) return [];
+
+  const result: string[] = [];
+
+  for (let i = 0; i < paths[0].length; i++) {
+    const value = paths[0][i];
+
+    if (paths.every((path) => path[i] === value)) {
+      result.push(value);
+    } else {
+      break;
+    }
+  }
+
+  return result;
+}
+
+export async function retrieveExhaustive(
   query: string,
   vectorStore: MemoryVectorStore,
   allDocuments: Document[],
@@ -29,90 +51,101 @@ export async function retrieveWithSectionExpansion(
   const matches =
     await vectorStore.similaritySearch(query, initialK);
 
-    console.log("\nInitial semantic matches");
+  console.log("\nInitial semantic matches");
 
   for (const [index, doc] of matches.entries()) {
-    console.log(
-      index,
-      (doc.metadata.headingPath as string[] | undefined)?.join(" > ")
-    );
+    console.log(index, getPath(doc).join(" > "));
   }
-  
-  const expansionRoots: string[][] = [];
 
-  for (const match of matches) {
-    const path = match.metadata.headingPath as
-      | string[]
-      | undefined;
+  /*
+   * Use the strongest few semantic hits to establish scope.
+   *
+   * Starting with 3 is deliberately conservative.
+   */
+  const strongestPaths = matches
+    .slice(0, 3)
+    .map(getPath)
+    .filter((path) => path.length > 0);
 
-    if (!path?.length) {
+  const scope = commonPrefix(strongestPaths);
+
+  console.log(
+    "\nDetected exhaustive scope:",
+    scope.join(" > ")
+  );
+
+  /*
+   * Find the immediate structural children of that scope.
+   *
+   * Example:
+   *
+   * APPENDIX A
+   *   A.1
+   *   A.2
+   *   A.3
+   *   A.4
+   */
+  const childPaths: string[][] = [];
+
+  for (const doc of allDocuments) {
+    const path = getPath(doc);
+
+    if (!isDescendant(path, scope)) {
       continue;
     }
 
-    /*
-     * Does THIS matched structural node have descendants?
-     *
-     * Crucially, we do NOT climb up to its parent.
-     */
-    const hasDescendants = allDocuments.some((doc) => {
-      const candidate = doc.metadata.headingPath as
-        | string[]
-        | undefined;
+    const childPath = path.slice(0, scope.length + 1);
+
+    if (
+      !childPaths.some((existing) =>
+        isSamePath(existing, childPath)
+      )
+    ) {
+      childPaths.push(childPath);
+    }
+  }
+
+  /*
+   * Which of those immediate children look relevant to
+   * the query?
+   *
+   * For now, use the initial semantic hits as evidence.
+   */
+  const relevantChildren = childPaths.filter((childPath) =>
+    matches.some((match) => {
+      const matchPath = getPath(match);
 
       return (
-        candidate &&
-        isDescendant(candidate, path)
+        isSamePath(matchPath, childPath) ||
+        isDescendant(matchPath, childPath)
       );
-    });
+    })
+  );
 
-    if (hasDescendants) {
-      /*
-       * Avoid adding the same root more than once.
-       */
-      if (
-        !expansionRoots.some((root) =>
-          samePath(root, path)
-        )
-      ) {
-        expansionRoots.push(path);
-      }
-    }
+  console.log("\nRelevant child sections");
+
+  for (const path of relevantChildren) {
+    console.log(path.join(" > "));
   }
 
   /*
-   * If semantic search found no expandable parent,
-   * just use the original semantic matches.
-   */
-  if (expansionRoots.length === 0) {
-    return {
-      matches,
-      expansionRoots: [],
-      documents: matches,
-    };
-  }
-
-  /*
-   * Return each matched parent plus all of its descendants.
+   * Expand every relevant child completely.
    */
   const documents = allDocuments.filter((doc) => {
-    const path = doc.metadata.headingPath as
-      | string[]
-      | undefined;
+    const path = getPath(doc);
 
-    if (!path) {
-      return false;
-    }
-
-    return expansionRoots.some(
-      (root) =>
-        samePath(path, root) ||
-        isDescendant(path, root)
+    return relevantChildren.some(
+      (childPath) =>
+        isSamePath(path, childPath) ||
+        isDescendant(path, childPath)
     );
   });
 
   return {
     matches,
-    expansionRoots,
+    scope,
+    relevantChildren,
     documents,
   };
 }
+
