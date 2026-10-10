@@ -6,7 +6,7 @@ import usageRouter from "./routes/usage.js";
 import uploadRouter from "./routes/upload.js";
 
 const app = express();
-const port = 3001;
+const port = Number(process.env.PORT) || 3001;
 
 app.use(
   cors({

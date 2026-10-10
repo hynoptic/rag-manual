@@ -1,0 +1,69 @@
+name: Deploy API
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/api/**"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".github/workflows/deploy-api.yml"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.22.0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build API
+        run: pnpm --filter api run build
+
+      - name: Create deployment bundle
+        working-directory: apps/api
+        run: zip -r ../../rag-manual-api.zip Procfile package.json dist
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::262276228075:role/rag-manual-github-deploy
+          aws-region: eu-north-1
+
+      - name: Upload application version
+        run: |
+          BUCKET=$(aws elasticbeanstalk create-storage-location --query S3Bucket --output text)
+
+          aws s3 cp \
+            rag-manual-api.zip \
+            "s3://$BUCKET/rag-manual-api/github-${GITHUB_SHA}.zip"
+
+          aws elasticbeanstalk create-application-version \
+            --application-name rag-manual-api \
+            --version-label "github-${GITHUB_SHA}" \
+            --source-bundle S3Bucket="$BUCKET",S3Key="rag-manual-api/github-${GITHUB_SHA}.zip"
+
+      - name: Deploy to Elastic Beanstalk
+        run: |
+          aws elasticbeanstalk update-environment \
+            --environment-name Rag-manual-api-env \
+            --version-label "github-${GITHUB_SHA}"
