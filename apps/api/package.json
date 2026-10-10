@@ -16,6 +16,7 @@
     "@langchain/core": "^1.2.13",
     "@langchain/openai": "^1.6.0",
     "@langchain/textsplitters": "^1.0.2",
+    "@llamaindex/llama-cloud": "^2.17.0",
     "@supabase/supabase-js": "^2.117.2",
     "cors": "^2.8.6",
     "dotenv": "^18.0.5",

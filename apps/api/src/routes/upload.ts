@@ -10,6 +10,17 @@ const router = Router();
 
 const upload = multer({
   dest: "/tmp",
+  limits: {
+    fileSize: 50 * 1024 * 1024,
+  },
+  fileFilter: (_req, file, callback) => {
+    if (file.mimetype !== "application/pdf") {
+      callback(new Error("Only PDF files are supported"));
+      return;
+    }
+
+    callback(null, true);
+  },
 });
 
 router.post("/", upload.single("file"), async (req, res) => {
@@ -40,29 +51,42 @@ router.post("/", upload.single("file"), async (req, res) => {
       });
     }
 
-    const key = `uploads/${crypto.randomUUID()}-${req.file.originalname}`;
+    const documentId = crypto.randomUUID();
+    const sourceKey = `documents/${documentId}/source.pdf`;
 
     await s3.send(
       new PutObjectCommand({
-        Bucket: process.env.S3_UPLOAD_BUCKET,
-        Key: key,
+        Bucket: process.env.S3_DOCUMENT_BUCKET,
+        Key: sourceKey,
         Body: fs.createReadStream(req.file.path),
         ContentType: req.file.mimetype,
       }),
     );
 
     console.log("Uploaded to S3:", {
-      bucket: process.env.S3_UPLOAD_BUCKET,
-      key,
+      bucket: process.env.S3_DOCUMENT_BUCKET,
+      key: sourceKey,
       size: req.file.size,
     });
+
+    const { data: document, error: documentError } = await supabase
+      .from("documents")
+      .insert({
+        id: documentId,
+        user_id: user.id,
+        filename: req.file.originalname,
+        source_s3_key: sourceKey,
+      })
+      .select()
+      .single();
+
+    if (documentError) throw documentError;
 
     const { data: job, error } = await supabase
       .from("parse_jobs")
       .insert({
         user_id: user.id,
-        s3_key: key,
-        filename: req.file.originalname,
+        document_id: document.id,
         status: "queued",
       })
       .select()
@@ -79,12 +103,12 @@ router.post("/", upload.single("file"), async (req, res) => {
       status: job.status,
     });
   } catch (error) {
-    console.error("S3 upload failed:", error);
+    console.error("Upload/job creation failed:", error);
     return res.status(500).json({
       error: "Upload/job creation failed",
     });
   } finally {
-    await fs.promises.unlink(req.file.path);
+    await fs.promises.unlink(req.file.path).catch(() => {});
   }
 });
 
