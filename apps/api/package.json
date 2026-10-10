@@ -6,7 +6,8 @@
     "dev": "tsx watch src/index.ts",
     "worker:parse": "tsx watch src/workers/parse-worker.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "worker:parse:start": "node dist/workers/parse-worker.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1147.0",
