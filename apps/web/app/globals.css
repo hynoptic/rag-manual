@@ -67,8 +67,10 @@
   }
 }
 
+
+
 .truncate {
-  @apply: w-40
+  @apply w-40;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

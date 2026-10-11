@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { DeleteIcon, RefreshCwIcon, RotateCcwIcon, SendIcon, Trash2Icon } from "lucide-react";
+import { RotateCcwIcon, SendIcon } from "lucide-react";
 
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter } from "./ui/card";
