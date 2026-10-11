@@ -5,8 +5,10 @@ import { LogoutButton } from "./logout-button";
 import { Suspense } from "react";
 import { ShowUsage } from "./show-usage";
 import { ShowUsageClient } from "./show-usage-client";
+import { connection } from "next/server";
 
 export async function AuthButton() {
+  await connection();
   const supabase = await createClient();
 
   // You can also use getUser() which will be slower.
@@ -16,10 +18,10 @@ export async function AuthButton() {
 
   return user ? (
     <div className="flex items-center gap-4">
-      {user.email}
-       {/* <Suspense>
-          <ShowUsageClient />
-        </Suspense> */}
+      <span className="text-muted-foreground">{user.email}</span>
+      <Suspense>
+          <ShowUsage />
+        </Suspense>
       <LogoutButton />
     </div>
   ) : (

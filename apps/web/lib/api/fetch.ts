@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { Database } from "@rag-manual/database";
 
 const API_URL = process.env.API_URL;
 

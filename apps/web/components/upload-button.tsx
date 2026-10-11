@@ -7,6 +7,7 @@ import { ApiError, clientApiFetch } from "@/lib/api/client";
 
 import { postgresChangesFilter } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
+import { Separator } from "./ui/separator";
 
 type ParseJobStatus = "queued" | "processing" | "completed" | "failed";
 
@@ -133,7 +134,7 @@ export default function UploadButton() {
       : "Upload PDF";
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-col items-center gap-4 text-muted-foreground">
       <input
         ref={fileInputRef}
         className="hidden"
@@ -146,7 +147,7 @@ export default function UploadButton() {
           }
         }}
       />
-      <Button disabled={isProcessing} onClick={handleButtonClick}>
+      <Button className="text-muted-foreground" variant="outline" disabled={isProcessing} onClick={handleButtonClick}>
         {buttonlabel}&nbsp;
         {isUploading || isProcessing ? (
           <Spinner className="inline-block" data-icon="inline-start" />

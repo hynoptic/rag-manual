@@ -7,8 +7,9 @@ import { pipeline } from "node:stream/promises";
 import { Readable } from "node:stream";
 import LlamaCloud from "@llamaindex/llama-cloud";
 import { createClient } from "@supabase/supabase-js";
+import type { Database } from "@rag-manual/database";
 
-const supabase = createClient(
+const supabase = createClient<Database>(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_SECRET_KEY!,
 );

@@ -111,3 +111,4 @@ Please file feedback and issues over on the [Supabase GitHub org](https://github
 aws login
 aws sts get-caller-identity
 aws s3 ls s3://amzn-s3-rag-manual-dev
+pnpm dlx supabase@latest login

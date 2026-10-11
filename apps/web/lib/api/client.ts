@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/client";
+import type { Database } from "@rag-manual/database";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 

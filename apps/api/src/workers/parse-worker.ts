@@ -5,7 +5,9 @@ import { parseDocument } from "../parse/parse.js";
 import { s3 } from "../lib/s3.js";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 
-const supabase = createClient(
+import type { Database, ParseJob } from "@rag-manual/database";
+
+const supabase = createClient<Database>(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_SECRET_KEY!,
 );
@@ -15,7 +17,7 @@ const POLL_INTERVAL_MS = 2000;
 
 const activeJobs = new Set<string>();
 
-async function getNextQueuedJob() {
+async function getNextQueuedJob(): Promise<ParseJob | null> {
   const { data, error } = await supabase
     .from("parse_jobs")
     .select("*")
@@ -31,7 +33,7 @@ async function getNextQueuedJob() {
   return data;
 }
 
-async function processJob(job: any) {
+async function processJob(job: ParseJob) {
   activeJobs.add(job.id);
 
   // mark job as processing

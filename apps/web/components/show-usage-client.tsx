@@ -2,30 +2,26 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { clientApiFetch } from "@/lib/api/client";
-
-type Usage = {
-  tokenCount: number;
-};
+import { UsageResponse } from "@/lib/api/types";
 
 export function ShowUsageClient() {
-  const {
-    data,
-    isPending,
-    isError,
-    error,
-  } = useQuery({
+  const { data, isPending, isError, error } = useQuery({
     queryKey: ["usage"],
-    queryFn: () => clientApiFetch<Usage>("/api/usage"),
+    queryFn: () => clientApiFetch<UsageResponse>("/api/usage"),
   });
 
   if (isPending) {
-    return <p>Loading tokens...</p>;
+    return <p>Loading credits</p>;
   }
 
   if (isError) {
     console.error("Failed to fetch usage", error);
-    return <p>Could not fetch tokens.</p>;
+    return <p>Could not fetch credits</p>;
   }
 
-  return <p>Tokens (client): {data.tokenCount}</p>;
+  return (
+    <span className="text-muted-foreground">
+      {data.tokenCount.toLocaleString("en-US")}cr
+    </span>
+  );
 }

@@ -1,10 +1,7 @@
 // apps/web/lib/api/usage.ts
 import { apiFetch } from "./fetch";
-
-type Usage = {
-  tokenCount: number;
-};
+import { UsageResponse } from "./types";
 
 export function getUsage() {
-  return apiFetch<Usage>("/api/usage");
+  return apiFetch<UsageResponse>("/api/usage");
 }
