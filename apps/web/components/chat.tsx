@@ -6,19 +6,37 @@ import { RotateCcwIcon, SendIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter } from "./ui/card";
 import { Textarea } from "./ui/textarea";
+import { ApiError, clientApiFetch } from "@/lib/api/client";
+import { useQuery } from "@tanstack/react-query";
+import { ChatResponse } from "@/lib/api/types";
+import { PromptMode, useApplicationStore } from "@/lib/stores/application-store";
 
-type ChatMessage = {
-  id: string;
+export type ChatRequestMessage = {
   role: "user" | "assistant";
   content: string;
+};
+
+export type ChatRequest = {
+  messages: ChatRequestMessage[];
+  documentIds: string[];
+  promptMode: PromptMode;
+};
+
+type ChatMessage = ChatRequestMessage & {
+  id: string;
 };
 
 export function Chat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [prompt, setPrompt] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [tmp, setTmp] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const selectedDocumentIds = useApplicationStore(
+    (state) => state.selectedDocumentIds,
+  );
+
+  const promptMode = useApplicationStore((state) => state.promptMode);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({
@@ -27,7 +45,7 @@ export function Chat() {
     });
   }, [messages]);
 
-  function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const content = prompt.trim();
@@ -36,22 +54,53 @@ export function Chat() {
       return;
     }
 
-    const role = tmp ? "user" : "assistant";
-    setTmp(!tmp);
-
-    setMessages((messages) => [
+    const nextMessages = [
       ...messages,
       {
         id: crypto.randomUUID(),
-        role: role,
+        role: "user" as const,
         content,
       },
-    ]);
+    ];
 
+    setMessages(nextMessages);
     setPrompt("");
 
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
+    }
+
+    //
+
+    try {
+      const response = await clientApiFetch<ChatResponse>("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: nextMessages.map(({ role, content }) => ({
+            role,
+            content,
+          })),
+          documentIds: selectedDocumentIds,
+          promptMode,
+        }),
+      });
+
+      setMessages((messages) => [
+        ...messages,
+        {
+          id: crypto.randomUUID(),
+          role: "assistant",
+          content: response.reply,
+        },
+      ]);
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error(error.status, error.data);
+      }
+    } finally {
     }
   }
 

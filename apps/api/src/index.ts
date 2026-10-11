@@ -5,9 +5,12 @@ import cors from "cors";
 import usageRouter from "./routes/usage.js";
 import uploadRouter from "./routes/upload.js";
 import documentsRouter from "./routes/documents.js";
+import chatRouter from "./routes/chat.js";
 
 const app = express();
 const port = Number(process.env.PORT) || 3001;
+
+app.use(express.json());
 
 app.use(
   cors({
@@ -22,6 +25,7 @@ app.get("/health", (_req, res) => {
 app.use("/api/usage", usageRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/documents", documentsRouter);
+app.use("/api/chat", chatRouter);
 
 app.listen(port, () => {
   console.log(

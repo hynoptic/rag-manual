@@ -31,8 +31,8 @@ export default function SettingsPanel() {
           </div>
 
           <div className="flex items-center gap-3">
-            <RadioGroupItem value="rag" id="prompt-rag" />
-            <Label htmlFor="prompt-rag">RAG</Label>
+            <RadioGroupItem disabled={true} value="rag" id="prompt-rag" />
+            <Label className="opacity-50" htmlFor="prompt-rag">RAG (coming soon)</Label>
           </div>
         </RadioGroup>
       </CardContent>

@@ -17,8 +17,6 @@ router.get("/", async (req, res) => {
       });
     }
 
-    console.log(data);
-
     return res.json({
       documents: data,
     });
