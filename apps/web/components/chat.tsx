@@ -1,143 +1,127 @@
 "use client";
 
-import { useChat } from "@ai-sdk/react";
-import { createChat } from "@shadcn/helpers/ai-sdk";
-import type { UIMessage } from "ai";
+import { useEffect, useRef, useState } from "react";
+import { DeleteIcon, RefreshCwIcon, RotateCcwIcon, SendIcon, Trash2Icon } from "lucide-react";
 
-import {
-  ArrowUpIcon,
-  GlobeIcon,
-  ImageIcon,
-  MessageCircleDashedIcon,
-  PaperclipIcon,
-  PlusIcon,
-  RotateCwIcon,
-  TelescopeIcon,
-} from "lucide-react";
+import { Button } from "./ui/button";
+import { Card, CardContent, CardFooter } from "./ui/card";
+import { Textarea } from "./ui/textarea";
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Empty,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/components/ui/empty";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-} from "@/components/ui/input-group";
-import {
-  MessageScroller,
-  MessageScrollerButton,
-  MessageScrollerContent,
-  MessageScrollerItem,
-  MessageScrollerProvider,
-  MessageScrollerViewport,
-} from "@/components/ui/message-scroller";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
-function getMessageText(message: UIMessage) {
-  return message.parts
-    .filter((part) => part.type === "text")
-    .map((part) => part.text)
-    .join("");
-}
-
-type MessageAnimatedProps = {
-  message: UIMessage;
-  scrollAnchor?: boolean;
+type ChatMessage = {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
 };
 
-function MessageAnimated({ message, scrollAnchor }: MessageAnimatedProps) {
-  return (
-    <MessageScrollerItem
-      messageId={message.id}
-      scrollAnchor={scrollAnchor}
-      className="space-y-2 py-2"
-    >
-      <div className="text-xs font-medium text-muted-foreground">
-        {message.role === "user" ? "You" : "Assistant"}
-      </div>
-
-      {message.parts.map((part, index) =>
-        part.type === "text" ? (
-          <p key={index} className="whitespace-pre-wrap">
-            {part.text}
-          </p>
-        ) : null,
-      )}
-    </MessageScrollerItem>
-  );
-}
-
-const chat = createChat()
-  .user(
-    "I'm building a chat for our app and the scroll behavior is driving me nuts. Every time the AI streams a reply, the whole thread jumps around.",
-  )
-  .sleep(1000)
-  .assistant(
-    "That's the classic streaming scroll problem. Wrap your message list in `MessageScroller` and turn on `autoScroll` — the viewport pins to the bottom as tokens arrive, so users always see the latest text land in place.\n\nThe important part: it only auto-scrolls while the reader is already at the bottom. The moment they scroll up to read something earlier, auto-scroll backs off and their position is preserved. You get smooth streaming without fighting the user's intent.",
-  )
-  .user(
-    "Okay, but when someone sends a new message the view still feels jarring — like the whole conversation reloads from the top.",
-  )
-  .sleep(1000)
-  .assistant(
-    "MessageScrollerItem fixes that with turn anchoring. Set `scrollAnchor` on the turn that should settle near the top instead of blindly snapping to the document bottom.\n\nIt also leaves a small peek of the previous exchange visible above the anchor, so context isn't lost. The reply starts in view without that disorienting jump you get from a plain overflow container.",
-  )
-  .user(
-    "And if they've scrolled up to re-read an older answer? I don't want to yank them back down.",
-  )
-  .sleep(1000)
-  .assistant(
-    "You won't. Auto-scroll only runs when the viewport is already pinned to the bottom, so scrolling up is a deliberate opt-out — their place in the thread stays put even as new tokens keep arriving below.\n\nWhen there is content they haven't seen yet, `MessageScrollerButton` appears at the bottom of the viewport. One tap jumps them back to the newest message and re-engages auto-scroll. Same pattern as Slack or iMessage: quiet when you're caught up, helpful when you're not.",
-  )
-  .user("Last one — does this work with assistive tech?")
-  .sleep(1000)
-  .assistant(
-    '`MessageScrollerContent` sets `role="log"` and `aria-relevant="additions"` by default, so screen readers announce new messages as they stream in.\n\nThe scroll button is a real `<button>` with an sr-only label, and it\'s removed from the tab order when you\'re already at the bottom — no ghost focus stops.',
-  );
-
-const initialMessages = chat.get(0);
-const transport = chat.transport({ delayMs: 20 });
-
 export function Chat() {
-  
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [prompt, setPrompt] = useState("");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [tmp, setTmp] = useState(true);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+    });
+  }, [messages]);
+
+  function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const content = prompt.trim();
+
+    if (!content) {
+      return;
+    }
+
+    const role = tmp ? "user" : "assistant";
+    setTmp(!tmp);
+
+    setMessages((messages) => [
+      ...messages,
+      {
+        id: crypto.randomUUID(),
+        role: role,
+        content,
+      },
+    ]);
+
+    setPrompt("");
+
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
+  }
 
   return (
-    <Card>
-  <CardHeader>
-    <CardTitle>Card Title</CardTitle>
-    <CardDescription>Card Description</CardDescription>
-  </CardHeader>
-  <CardContent>
-    <p>Card Content</p>
-  </CardContent>
-  <CardFooter>
-    <p>Card Footer</p>
-  </CardFooter>
-</Card>
+    <Card className="flex h-full min-h-0 flex-col">
+      <CardContent className="min-h-0 flex-1 overflow-hidden">
+        <div className="h-full overflow-y-auto">
+          {messages.map((message) => (
+            <div
+              key={message.id}
+              className={
+                message.role === "user"
+                  ? "ml-auto max-w-[80%] rounded-xl bg-muted px-4 py-3 mb-4 whitespace-pre-wrap"
+                  : "mr-auto max-w-[80%] px-4 py-3 mb-4 whitespace-pre-wrap"
+              }
+            >
+              {message.content}
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+      </CardContent>
+
+      <CardFooter>
+        <form onSubmit={handleSubmit} className="flex w-full items-end">
+          <Textarea
+            ref={textareaRef}
+            value={prompt}
+            onChange={(event) => setPrompt(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                event.currentTarget.form?.requestSubmit();
+              }
+            }}
+            onInput={(event) => {
+              const textarea = event.currentTarget;
+              textarea.style.height = "auto";
+              textarea.style.height = `${Math.min(
+                textarea.scrollHeight,
+                160,
+              )}px`;
+            }}
+            placeholder="Ask a question..."
+            rows={1}
+            className="!text-base min-h-10 max-h-40 flex-1 resize-none overflow-y-auto focus-visible:border-input focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:shadow-none"
+          />
+
+          <Button
+            type="submit"
+            // size="icon"
+            variant="ghost"
+            disabled={!prompt.trim()}
+            aria-label="Send message"
+            className="shrink-0 size-12 [&_svg]:!size-6"
+          >
+            <SendIcon className="shrink-0 text-muted-foreground" />
+          </Button>
+          <Button
+            type="button"
+            // size="icon"
+            variant="ghost"
+            aria-label="Send message"
+            className="shrink-0 size-12 [&_svg]:!size-6"
+            onClick={() => setMessages([])}
+          >
+            <RotateCcwIcon className="shrink-0 text-muted-foreground" />
+          </Button>
+        </form>
+      </CardFooter>
+    </Card>
   );
 }

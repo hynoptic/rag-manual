@@ -25,7 +25,7 @@ export default function CorpusRow({ id, filename }: CorpusRowProps) {
         checked={checked}
         onCheckedChange={() => toggleDocument(id)}
       />
-      <span className="text-muted-foreground">{filename}</span>
+      <span className="text-muted-foreground truncate">{filename}</span>
     </label>
   );
 }
