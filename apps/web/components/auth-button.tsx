@@ -19,9 +19,9 @@ export async function AuthButton() {
   return user ? (
     <div className="flex items-center gap-3">
       <span className="text-muted-foreground">{user.email}</span>
-      <Suspense>
+      {/* <Suspense>
           <ShowUsage />
-        </Suspense>
+        </Suspense> */}
       <LogoutButton />
     </div>
   ) : (
