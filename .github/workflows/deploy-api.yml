@@ -58,11 +58,11 @@ jobs:
           cd ../../deploy-api
           zip -r ../rag-manual-api.zip Procfile package.json dist
 
-            - name: Configure AWS credentials
-              uses: aws-actions/configure-aws-credentials@v5
-              with:
-                role-to-assume: arn:aws:iam::262276228075:role/rag-manual-github-deploy
-                aws-region: eu-north-1
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::262276228075:role/rag-manual-github-deploy
+          aws-region: eu-north-1
 
       - name: Upload application version
         run: |
