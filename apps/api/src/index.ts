@@ -15,7 +15,7 @@ app.use(
 );
 
 app.get("/health", (_req, res) => {
-  res.json({ ok: true });
+  res.json({ ok: true, foo: 1 });
 });
 
 app.use("/api/usage", usageRouter);
