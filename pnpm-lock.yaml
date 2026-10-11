@@ -41,9 +41,6 @@ importers:
       '@llamaindex/llama-cloud':
         specifier: ^2.17.0
         version: 2.17.0
-      '@rag-manual/database':
-        specifier: workspace:*
-        version: link:../../packages/database
       '@supabase/supabase-js':
         specifier: ^2.117.2
         version: 2.117.2
@@ -72,6 +69,9 @@ importers:
         specifier: ^3.25.76
         version: 3.25.76
     devDependencies:
+      '@rag-manual/database':
+        specifier: workspace:*
+        version: link:../../packages/database
       '@types/cors':
         specifier: ^2.8.19
         version: 2.8.19
