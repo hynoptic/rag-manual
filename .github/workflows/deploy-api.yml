@@ -42,13 +42,27 @@ jobs:
 
       - name: Create deployment bundle
         working-directory: apps/api
-        run: zip -r ../../rag-manual-api.zip Procfile package.json dist
+        run: |
+          mkdir -p ../../deploy-api
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v5
-        with:
-          role-to-assume: arn:aws:iam::262276228075:role/rag-manual-github-deploy
-          aws-region: eu-north-1
+          cp -r dist ../../deploy-api/
+          cp Procfile ../../deploy-api/
+
+          node -e "
+            const fs = require('fs');
+            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            delete pkg.devDependencies?.['@rag-manual/database'];
+            fs.writeFileSync('../../deploy-api/package.json', JSON.stringify(pkg, null, 2));
+          "
+
+          cd ../../deploy-api
+          zip -r ../rag-manual-api.zip Procfile package.json dist
+
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v5
+              with:
+                role-to-assume: arn:aws:iam::262276228075:role/rag-manual-github-deploy
+                aws-region: eu-north-1
 
       - name: Upload application version
         run: |
