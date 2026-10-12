@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
     });
 
     const agent = createAgent({
-      model: "gpt-4o",
+      model: "gpt-4.1",
       tools: [],
       systemPrompt,
     });

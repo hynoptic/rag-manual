@@ -9,8 +9,8 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "RAG Manual",
-  description: "RAG Manual",
+  title: "MyCorpora",
+  description: "An AI-powered platform for querying curated collections of technical manuals",
 };
 
 const geistSans = Geist({
