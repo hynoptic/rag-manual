@@ -12,10 +12,10 @@ const port = Number(process.env.PORT) || 3001;
 
 app.use(express.json());
 
-const allowedOrigins = [
-  "https://mycorpora.app",
-  "https://main.djy13nf7zarhq.amplifyapp.com",
-];
+const allowedOrigins = (process.env.CORS_ORIGINS ?? "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 app.use(
   cors({
