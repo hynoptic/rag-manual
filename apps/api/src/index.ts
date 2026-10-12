@@ -12,9 +12,14 @@ const port = Number(process.env.PORT) || 3001;
 
 app.use(express.json());
 
+const allowedOrigins = [
+  "https://mycorpora.app",
+  "https://main.djy13nf7zarhq.amplifyapp.com",
+];
+
 app.use(
   cors({
-    origin: process.env.WEB_URL,
+    origin: allowedOrigins,
   }),
 );
 
