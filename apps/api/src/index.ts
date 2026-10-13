@@ -6,6 +6,7 @@ import usageRouter from "./routes/usage.js";
 import uploadRouter from "./routes/upload.js";
 import documentsRouter from "./routes/documents.js";
 import chatRouter from "./routes/chat.js";
+import profileRouter from "./routes/profile.js";
 
 const app = express();
 const port = Number(process.env.PORT) || 3001;
@@ -31,6 +32,7 @@ app.use("/api/usage", usageRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/documents", documentsRouter);
 app.use("/api/chat", chatRouter);
+app.use("/api/profile", profileRouter);
 
 app.listen(port, () => {
   console.log(

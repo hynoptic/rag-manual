@@ -4,12 +4,20 @@ import { getAuthContext } from "../lib/auth.js";
 const router = Router();
 
 router.get("/", async (req, res) => {
-  try {
-    const { supabase } = await getAuthContext(req);
+  let supabase;
 
+  try {
+    ({ supabase } = await getAuthContext(req));
+  } catch {
+    return res.status(401).json({
+      error: "Unauthorized",
+    });
+  }
+
+  try {
     const { data, error } = await supabase.from("documents").select();
 
-    if (error || !data) {
+    if (error) {
       console.error("Failed to fetch documents", error);
 
       return res.status(500).json({
@@ -17,12 +25,12 @@ router.get("/", async (req, res) => {
       });
     }
 
-    return res.json({
-      documents: data,
-    });
-  } catch {
-    return res.status(401).json({
-      error: "Unauthorized",
+    return res.json(data);
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      error: "Unknown server error",
     });
   }
 });

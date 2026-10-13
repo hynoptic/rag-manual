@@ -4,28 +4,38 @@ import { getAuthContext } from "../lib/auth.js";
 const router = Router();
 
 router.get("/", async (req, res) => {
-  try {
-    const { supabase } = await getAuthContext(req);
+  let supabase;
 
+  try {
+    ({ supabase } = await getAuthContext(req));
+  } catch {
+    return res.status(401).json({
+      error: "Unauthorized",
+    });
+  }
+
+  try {
     const { data, error } = await supabase
       .from("usage")
       .select("token_count")
       .single();
 
-    if (error || !data) {
+    if (error) {
       console.error("Failed to fetch usage", error);
 
       return res.status(500).json({
-        error: "Failed to fetch usage",
+        error: "Failed to fetch profile",
       });
     }
 
     return res.json({
-      tokenCount: data.token_count,
+     tokenCount: data.token_count
     });
-  } catch {
-    return res.status(401).json({
-      error: "Unauthorized",
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      error: "Unknown server error",
     });
   }
 });

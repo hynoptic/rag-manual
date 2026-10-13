@@ -4,9 +4,12 @@ import CorpusRow from "./corpus-row";
 
 export default async function Corpus() {
   await connection();
-  const result = await getDocuments();
-  const documents = result.documents.map((document) => (
-    <CorpusRow key={document.id} {...document}></CorpusRow>
-  ));
-  return <>{documents}</>;
+  const documents = await getDocuments();
+  return (
+    <>
+      {documents.map((document) => (
+        <CorpusRow key={document.id} {...document}></CorpusRow>
+      ))}
+    </>
+  );
 }

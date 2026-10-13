@@ -1,9 +1,5 @@
-import type { Document } from "@rag-manual/database";
 import { apiFetch } from "./fetch";
-
-export type DocumentsResponse = {
-  documents: Document[];
-};
+import { DocumentsResponse } from "./types";
 
 export function getDocuments() {
   return apiFetch<DocumentsResponse>("/api/documents");
