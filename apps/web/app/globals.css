@@ -69,9 +69,9 @@
 
 
 
-.truncate {
-  @apply w-40;
+/* .truncate {
+  @apply max-w-60;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
+} */

@@ -1,15 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { RotateCcwIcon, SendIcon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
+import { ApiError, clientApiFetch } from "@/lib/api/client";
+import { ChatResponse } from "@/lib/api/types";
+import {
+  PromptMode,
+  useApplicationStore,
+} from "@/lib/stores/application-store";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter } from "./ui/card";
 import { Textarea } from "./ui/textarea";
-import { ApiError, clientApiFetch } from "@/lib/api/client";
-import { useQuery } from "@tanstack/react-query";
-import { ChatResponse } from "@/lib/api/types";
-import { PromptMode, useApplicationStore } from "@/lib/stores/application-store";
+
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export type ChatRequestMessage = {
   role: "user" | "assistant";
@@ -117,7 +122,13 @@ export function Chat() {
                   : "mr-auto max-w-[80%] px-4 py-3 mb-4 whitespace-pre-wrap"
               }
             >
-              {message.content}
+              {message.role === "user" ? (
+                message.content
+              ) : (
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {message.content}
+                </ReactMarkdown>
+              )}
             </div>
           ))}
           <div ref={messagesEndRef} />

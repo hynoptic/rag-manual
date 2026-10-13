@@ -4,6 +4,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useApplicationStore } from "@/lib/stores/application-store";
 import type { Document } from "@rag-manual/database";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 type CorpusRowProps = Pick<Document, "id" | "filename">;
 
 export default function CorpusRow({ id, filename }: CorpusRowProps) {
@@ -11,19 +17,55 @@ export default function CorpusRow({ id, filename }: CorpusRowProps) {
     (state) => state.selectedDocumentIds,
   );
 
-  const toggleDocument = useApplicationStore(
-    (state) => state.toggleDocument,
-  );
+  const toggleDocument = useApplicationStore((state) => state.toggleDocument);
 
   const checked = selectedDocumentIds.includes(id);
 
   return (
-    <label className="flex items-center gap-2 p-1">
-      <Checkbox
-        checked={checked}
-        onCheckedChange={() => toggleDocument(id)}
-      />
-      <span className="text-muted-foreground /truncate">{filename}</span>
-    </label>
+    <Tooltip>
+      <label className="flex items-center gap-2 p-1">
+        <Checkbox
+          checked={checked}
+          onCheckedChange={() => toggleDocument(id)}
+        />
+        <TooltipTrigger className="min-w-0 flex-1 text-left truncate text-muted-foreground items-end">
+          {filename}
+        </TooltipTrigger>
+      </label>
+      <TooltipContent side="right">
+        <p className="text-base">{filename}</p>
+        <p className="text-muted-foreground">{id}</p>
+      </TooltipContent>
+    </Tooltip>
   );
 }
+
+// "use client";
+
+// import { Checkbox } from "@/components/ui/checkbox";
+// import { useApplicationStore } from "@/lib/stores/application-store";
+// import type { Document } from "@rag-manual/database";
+
+// type CorpusRowProps = Pick<Document, "id" | "filename">;
+
+// export default function CorpusRow({ id, filename }: CorpusRowProps) {
+//   const selectedDocumentIds = useApplicationStore(
+//     (state) => state.selectedDocumentIds,
+//   );
+
+//   const toggleDocument = useApplicationStore(
+//     (state) => state.toggleDocument,
+//   );
+
+//   const checked = selectedDocumentIds.includes(id);
+
+//   return (
+//     <label className="flex items-center gap-2 p-1">
+//       <Checkbox
+//         checked={checked}
+//         onCheckedChange={() => toggleDocument(id)}
+//       />
+//       <span className="text-muted-foreground truncate">{filename}</span>
+//     </label>
+//   );
+// }
