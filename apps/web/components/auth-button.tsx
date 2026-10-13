@@ -1,14 +1,11 @@
-import Link from "next/link";
-import { Button } from "./ui/button";
 import { createClient } from "@/lib/supabase/server";
-import { LogoutButton } from "./logout-button";
+import Link from "next/link";
 import { Suspense } from "react";
+import { LogoutButton } from "./logout-button";
 import { ShowUsage } from "./show-usage";
-import { ShowUsageClient } from "./show-usage-client";
-import { connection } from "next/server";
+import { Button } from "./ui/button";
 
 export async function AuthButton() {
-  await connection();
   const supabase = await createClient();
 
   // You can also use getUser() which will be slower.
