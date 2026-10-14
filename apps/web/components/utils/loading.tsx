@@ -1,4 +1,4 @@
-import { Spinner } from "./ui/spinner";
+import { Spinner } from "../ui/spinner";
 
 export default function Loading({ text = "Loading" }: { text?: string }) {
   return (

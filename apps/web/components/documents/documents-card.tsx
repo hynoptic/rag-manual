@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import Documents from "./documents";
-import Loading from "./loading";
 import {
   Card,
   CardHeader,
@@ -8,8 +7,9 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from "./ui/card";
-import UploadButton from "./upload-button";
+} from "../ui/card";
+import AddDocumentButton from "./add-document-button";
+import Loading from "../utils/loading";
 
 export default function DocumentsCard() {
   return (
@@ -24,7 +24,7 @@ export default function DocumentsCard() {
         </Suspense>
       </CardContent>
       <CardFooter>
-        <UploadButton />
+        <AddDocumentButton />
       </CardFooter>
     </Card>
   );

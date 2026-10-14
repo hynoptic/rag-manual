@@ -1,13 +1,12 @@
 "use client";
 
-import { Spinner } from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
 import { ApiError, clientApiFetch } from "@/lib/api/client";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-import { postgresChangesFilter } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
-import { Separator } from "./ui/separator";
+import { postgresChangesFilter } from "@supabase/supabase-js";
 
 type ParseJobStatus = "queued" | "processing" | "completed" | "failed";
 
@@ -28,7 +27,7 @@ type ParseJob = {
   completed_at: string | null;
 };
 
-export default function UploadButton() {
+export default function AddDocumentButton() {
   const supabase = useMemo(() => createClient(), []);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -131,7 +130,7 @@ export default function UploadButton() {
     ? "Cancel"
     : isProcessing
       ? "Processing"
-      : "Upload PDF";
+      : "Add Document";
 
   return (
     <div className="flex flex-col items-center gap-4 text-muted-foreground">

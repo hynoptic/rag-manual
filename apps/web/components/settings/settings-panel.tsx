@@ -1,9 +1,12 @@
 "use client";
 
-import { PromptMode, useApplicationStore } from "@/lib/stores/application-store";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Label } from "./ui/label";
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import {
+  PromptMode,
+  useApplicationStore,
+} from "@/lib/stores/application-store";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Label } from "../ui/label";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 
 export default function SettingsPanel() {
   const promptMode = useApplicationStore((state) => state.promptMode);
@@ -20,9 +23,7 @@ export default function SettingsPanel() {
 
         <RadioGroup
           value={promptMode}
-          onValueChange={(value) =>
-            setPromptMode(value as PromptMode)
-          }
+          onValueChange={(value) => setPromptMode(value as PromptMode)}
           className="w-fit text-muted-foreground"
         >
           <div className="flex items-center gap-3">
@@ -32,7 +33,9 @@ export default function SettingsPanel() {
 
           <div className="flex items-center gap-3">
             <RadioGroupItem disabled={true} value="rag" id="prompt-rag" />
-            <Label className="opacity-50" htmlFor="prompt-rag">RAG (coming soon)</Label>
+            <Label className="opacity-50" htmlFor="prompt-rag">
+              RAG (coming soon)
+            </Label>
           </div>
         </RadioGroup>
       </CardContent>

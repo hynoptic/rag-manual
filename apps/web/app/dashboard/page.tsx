@@ -1,19 +1,6 @@
-import { Chat } from "@/components/chat";
-import Documents from "@/components/documents";
-import DocumentsCard from "@/components/documents-card";
-import Loading from "@/components/loading";
-import SettingsPanel from "@/components/settings-panel";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import UploadButton from "@/components/upload-button";
-import { Suspense } from "react";
+import { Chat } from "@/components/chat/chat";
+import DocumentsCard from "@/components/documents/documents-card";
+import SettingsPanel from "@/components/settings/settings-panel";
 
 export default function DashboardPage() {
   return (

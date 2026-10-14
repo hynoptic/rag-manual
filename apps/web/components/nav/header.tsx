@@ -1,5 +1,5 @@
-import { AuthButton } from "@/components/auth-button";
 import { Suspense } from "react";
+import { AuthButton } from "../auth/auth-button";
 
 export default function Header() {
   return (

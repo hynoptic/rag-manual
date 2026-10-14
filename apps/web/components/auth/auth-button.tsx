@@ -1,9 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { Suspense } from "react";
+import { Button } from "../ui/button";
 import { LogoutButton } from "./logout-button";
-import { ShowUsage } from "./show-usage";
-import { Button } from "./ui/button";
+import { ShowUsage } from "../utils/show-usage";
 
 export async function AuthButton() {
   const supabase = await createClient();

@@ -1,5 +1,5 @@
-import Header from "@/components/header";
-import Loading from "@/components/loading";
+import Header from "@/components/nav/header";
+import Loading from "@/components/utils/loading";
 import { Suspense } from "react";
 
 export default function DashboardLayout({

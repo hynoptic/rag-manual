@@ -9,12 +9,12 @@ import {
   PromptMode,
   useApplicationStore,
 } from "@/lib/stores/application-store";
-import { Button } from "./ui/button";
-import { Card, CardContent, CardFooter } from "./ui/card";
-import { Textarea } from "./ui/textarea";
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardFooter } from "../ui/card";
+import { Textarea } from "../ui/textarea";
 
 export type ChatRequestMessage = {
   role: "user" | "assistant";
