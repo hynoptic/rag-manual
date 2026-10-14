@@ -42,6 +42,7 @@ export function Chat() {
   );
 
   const promptMode = useApplicationStore((state) => state.promptMode);
+  const allowWebSearch = useApplicationStore((state) => state.allowWebSearch);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({
@@ -90,6 +91,7 @@ export function Chat() {
           })),
           documentIds: selectedDocumentIds,
           promptMode,
+          allowWebSearch,
         }),
       });
 

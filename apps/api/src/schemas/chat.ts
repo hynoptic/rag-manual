@@ -9,6 +9,7 @@ export const ChatRequestSchema = z.object({
   ),
   documentIds: z.array(z.string().uuid()),
   promptMode: z.enum(["full", "rag"]),
+  allowWebSearch: z.boolean(),
 });
 
 export type ChatRequest = z.infer<typeof ChatRequestSchema>;

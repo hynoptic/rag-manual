@@ -13,8 +13,11 @@ router.post("/", async (req, res) => {
     const {
       messages,
       documentIds,
-      // promptMode,
+      promptMode,
+      allowWebSearch,
     } = ChatRequestSchema.parse(req.body);
+
+    // console.log(promptMode, allowWebSearch);
 
     const { supabase } = await getAuthContext(req);
 
