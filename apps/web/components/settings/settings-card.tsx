@@ -33,7 +33,7 @@ export default function SettingsCard() {
           </CollapsibleTrigger>
         </CardHeader>
         <CollapsibleContent className="">
-          <CardContent className="py-4 pb-4 border-t max-h-[12.25rem] overflow-y-auto flex flex-col gap-4">
+          <CardContent className="py-4 pb-4 /border-t max-h-[12.25rem] overflow-y-auto flex flex-col gap-4">
             <PromptModeSetting />
             <Separator />
             <AllowWebSearch />
