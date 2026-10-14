@@ -1,14 +1,13 @@
 import { Router } from "express";
 
-import { createAgent, llmToolSelectorMiddleware, tool } from "langchain";
-// import { tavily } from "tavily";
+import { createAgent, llmToolSelectorMiddleware } from "langchain";
 
-import { ChatRequestSchema } from "../schemas/chat.js";
-import { buildPrompt } from "../lib/chat.js";
+
 import { getAuthContext } from "../lib/auth.js";
-import z from "zod";
+import { buildPrompt } from "../lib/chat.js";
+import { ChatRequestSchema } from "../schemas/chat.js";
 
-import { tavily } from "@tavily/core";
+import { searchAvily } from "../tools/search-avily.js";
 
 const router = Router();
 
@@ -17,8 +16,6 @@ router.post("/", async (req, res) => {
     const { messages, documentIds, promptMode, allowWebSearch } =
       ChatRequestSchema.parse(req.body);
 
-    // console.log(promptMode, allowWebSearch);
-
     const { supabase } = await getAuthContext(req);
 
     const systemPrompt = await buildPrompt({
@@ -26,41 +23,7 @@ router.post("/", async (req, res) => {
       supabase,
     });
 
-    const searchTool = tool(
-      async ({ query }) => {
-        const tvly = tavily({ apiKey: process.env.TAVILY_API_KEY });
-        const response = await tvly.search(query, {
-          maxResults: 5,
-          searchDepth: "advanced",
-        });
-
-        const searchResults = response.results
-          .map((result, index) =>
-            `
-## Search result ${index + 1}
-
-**Title:** ${result.title}
-**Source:** ${result.url}
-${result.publishedDate ? `**Published:** ${result.publishedDate}` : ""}
-
-${result.content}
-`.trim(),
-          )
-          .join("\n\n---\n\n");
-
-        return `Search results for ${query}: ${searchResults}`;
-      },
-      {
-        name: "search",
-        description:
-          "Search the web for current or external information relevant to the user's query when the supplied documents are insufficient.",
-        schema: z.object({
-          query: z.string(),
-        }),
-      },
-    );
-
-    const tools = allowWebSearch ? [searchTool] : [];
+    const tools = allowWebSearch ? [searchAvily] : [];
 
     const agent = createAgent({
       model: "gpt-4.1",
