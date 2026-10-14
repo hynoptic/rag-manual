@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import Corpus from "./corpus";
+import Documents from "./documents";
 import Loading from "./loading";
 import {
   Card,
@@ -11,16 +11,16 @@ import {
 } from "./ui/card";
 import UploadButton from "./upload-button";
 
-export default function CorpusPanel() {
+export default function DocumentsCard() {
   return (
     <Card>
       <CardHeader className="pb-4 border-b">
-        <CardTitle>Corpus</CardTitle>
+        <CardTitle>Documents</CardTitle>
         <CardDescription>Select documents</CardDescription>
       </CardHeader>
       <CardContent className="pb-4 border-b">
-        <Suspense fallback={<Loading text="Corpus" />}>
-          <Corpus />
+        <Suspense fallback={<Loading text="Documents" />}>
+          <Documents />
         </Suspense>
       </CardContent>
       <CardFooter>

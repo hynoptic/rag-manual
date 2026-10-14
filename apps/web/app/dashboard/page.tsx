@@ -1,6 +1,6 @@
 import { Chat } from "@/components/chat";
-import Corpus from "@/components/corpus";
-import CorpusPanel from "@/components/corpus-panel";
+import Documents from "@/components/documents";
+import DocumentsCard from "@/components/documents-card";
 import Loading from "@/components/loading";
 import SettingsPanel from "@/components/settings-panel";
 import {
@@ -19,7 +19,7 @@ export default function DashboardPage() {
   return (
     <section className="flex h-[calc(100vh-8rem)] min-h-0 w-full gap-8">
       <div className="flex w-80 shrink-0 flex-col gap-8">
-        <CorpusPanel />
+        <DocumentsCard />
         <SettingsPanel />
       </div>
       <div className="min-h-0 min-w-0 flex-1">

@@ -1,12 +1,12 @@
 import { getDocuments } from "@/lib/api/documents";
-import CorpusRow from "./corpus-row";
+import DocumentRow from "./document-row";
 
-export default async function Corpus() {
+export default async function Documents() {
   const documents = await getDocuments();
   return (
     <>
       {documents.map((document) => (
-        <CorpusRow key={document.id} {...document}></CorpusRow>
+        <DocumentRow key={document.id} {...document}></DocumentRow>
       ))}
     </>
   );
