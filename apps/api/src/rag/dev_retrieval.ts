@@ -1,14 +1,7 @@
-import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
-import { OpenAIEmbeddings } from "@langchain/openai";
-import {
-  RecursiveCharacterTextSplitter,
-  MarkdownTextSplitter,
-} from "@langchain/textsplitters";
 import { MemoryVectorStore } from "@langchain/classic/vectorstores/memory";
+import { OpenAIEmbeddings } from "@langchain/openai";
 import "dotenv/config";
 import { createAgent, dynamicSystemPromptMiddleware } from "langchain";
-import { readFile } from "fs/promises";
-import { Document, DocumentInterface } from "@langchain/core/documents";
 
 import pc from "picocolors";
 import { ingestMarkdown } from "./ingestion/ingest-markdown.js";
