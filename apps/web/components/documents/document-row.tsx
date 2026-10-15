@@ -9,6 +9,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import DocumentRowTooltip from "./document-row-tooltip";
 
 type DocumentRowProps = Pick<Document, "id" | "filename">;
 
@@ -32,10 +33,7 @@ export default function DocumentRow({ id, filename }: DocumentRowProps) {
           {filename}
         </TooltipTrigger>
       </label>
-      <TooltipContent side="right">
-        <p className="text-base">{filename}</p>
-        <p className="text-muted-foreground">{id}</p>
-      </TooltipContent>
+      <DocumentRowTooltip filename={filename} id={id}/>
     </Tooltip>
   );
 }
