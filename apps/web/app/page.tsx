@@ -10,7 +10,7 @@ export default function Home() {
         <p>
           Ask questions of a library of reference material curated by you.
           <br />
-          Get trusted answers, not endless distractions, and stay in your flow.
+          Get answers you can trust, avoid distractions, and stay in your flow.
         </p>
       </section>
     </main>
