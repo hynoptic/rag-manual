@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
-import AppVersion from "@/components/utils/version";
 import Version from "@/components/utils/version";
 
 const defaultUrl = process.env.VERCEL_URL
