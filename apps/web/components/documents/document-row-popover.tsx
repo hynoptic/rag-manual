@@ -1,19 +1,20 @@
 import { Check, Copy, ExternalLink, Trash } from "lucide-react";
 import { useRef, useState } from "react";
-import { TooltipContent } from "../ui/tooltip";
+import { PopoverContent } from "../ui/popover";
+import * as PopoverPrimitive from "@radix-ui/react-popover";
 
-type DocumentRowTooltipProps = {
+type DocumentRowPopoverProps = {
   filename: string;
   id: string;
 };
 
-const tooltipSmallIconProps = { size: 14 };
-const tooltipLargeIconProps = { size: 16 };
+const popoverSmallIconProps = { size: 14 };
+const popoverLargeIconProps = { size: 16 };
 
-export default function DocumentRowTooltip({
+export default function DocumentRowPopover({
   filename,
   id,
-}: DocumentRowTooltipProps) {
+}: DocumentRowPopoverProps) {
   const [confirmCopyId, setConfirmCopyId] = useState(false);
   const [confirmCopyFilename, setConfirmCopyFilename] = useState(false);
   const timeoutCopyIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -52,26 +53,27 @@ export default function DocumentRowTooltip({
   };
 
   return (
-    <TooltipContent side="right">
+    <PopoverContent className="dark w-fit px-2 py-1" side="right">
+      <PopoverPrimitive.Arrow />
       <p className="select-none text-base flex gap-2 items-center">
-        {filename}s
+        {filename}
         <span className="flex gap-1">
           <ExternalLink
             className="cursor-pointer"
             onClick={() => showDocument(id)}
-            {...tooltipLargeIconProps}
+            {...popoverLargeIconProps}
           />
           <Trash
             className="cursor-pointer"
             onClick={() => deleteDocument(id)}
-            {...tooltipLargeIconProps}
+            {...popoverLargeIconProps}
           />
           {confirmCopyFilename ? (
-            <Check {...tooltipLargeIconProps} className="pointer-events-none" />
+            <Check {...popoverLargeIconProps} className="pointer-events-none" />
           ) : (
             <Copy
               onClick={() => copyFilenameToClipboard(filename)}
-              {...tooltipLargeIconProps}
+              {...popoverLargeIconProps}
               className="cursor-pointer"
             />
           )}
@@ -80,15 +82,15 @@ export default function DocumentRowTooltip({
       <p className="text-muted-foreground flex gap-2 items-center select-none">
         {id}
         {confirmCopyId ? (
-          <Check {...tooltipSmallIconProps} className="pointer-events-none" />
+          <Check {...popoverSmallIconProps} className="pointer-events-none" />
         ) : (
           <Copy
             onClick={() => copyIdToClipboard(id)}
-            {...tooltipSmallIconProps}
+            {...popoverSmallIconProps}
             className="cursor-pointer"
           />
         )}
       </p>
-    </TooltipContent>
+    </PopoverContent>
   );
 }
