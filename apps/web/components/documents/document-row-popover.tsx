@@ -1,11 +1,14 @@
+import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { Check, Copy, ExternalLink, Trash } from "lucide-react";
 import { useRef, useState } from "react";
 import { PopoverContent } from "../ui/popover";
-import * as PopoverPrimitive from "@radix-ui/react-popover";
 
 type DocumentRowPopoverProps = {
   filename: string;
   id: string;
+  closePopover: () => void;
+  onDeleteDocument: () => void;
+  onViewMarkdown: () => void;
 };
 
 const popoverSmallIconProps = { size: 14 };
@@ -14,6 +17,9 @@ const popoverLargeIconProps = { size: 16 };
 export default function DocumentRowPopover({
   filename,
   id,
+  closePopover,
+  onViewMarkdown,
+  onDeleteDocument,
 }: DocumentRowPopoverProps) {
   const [confirmCopyId, setConfirmCopyId] = useState(false);
   const [confirmCopyFilename, setConfirmCopyFilename] = useState(false);
@@ -44,13 +50,15 @@ export default function DocumentRowPopover({
     }, 125);
   }
 
-  const deleteDocument = (id: string) => {
-    console.log("// delete", id);
-  };
+  // const deleteDocument = (id: string) => {
+  //   closePopover();
+  //   console.log("// delete", id);
+  // };
 
-  const showDocument = (id: string) => {
-    console.log("// show", id);
-  };
+  // const showDocument = (id: string) => {
+  //   closePopover();
+  //   console.log("// show", id);
+  // };
 
   return (
     <PopoverContent className="dark w-fit px-2 py-1" side="right">
@@ -60,12 +68,12 @@ export default function DocumentRowPopover({
         <span className="flex gap-1">
           <ExternalLink
             className="cursor-pointer"
-            onClick={() => showDocument(id)}
+            onClick={onViewMarkdown}
             {...popoverLargeIconProps}
           />
           <Trash
             className="cursor-pointer"
-            onClick={() => deleteDocument(id)}
+            onClick={onDeleteDocument}
             {...popoverLargeIconProps}
           />
           {confirmCopyFilename ? (
