@@ -18,6 +18,8 @@ export type ChatResponse = {
   reply: string;
 };
 
+export type DeleteDocumentResponse = Document;
+
 export type DocumentsResponse = Document[];
 
 export type ProfileResponse = Profile;

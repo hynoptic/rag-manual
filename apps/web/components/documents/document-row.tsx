@@ -10,11 +10,15 @@ import { Dialog } from "../ui/dialog";
 import DeleteDocumentDialog from "./delete-document-dialog";
 import DocumentRowPopover from "./document-row-popover";
 import ViewMarkdownDialog from "./view-markdown-document";
+import { deleteDocumentById } from "@/lib/api/documents.client";
+import { useRouter } from "next/navigation";
+import { ApiError } from "@/lib/api/client";
 
 type DocumentRowProps = Pick<Document, "id" | "filename">;
 type DocumentDialogTypes = "delete" | "view" | null;
 
 export default function DocumentRow({ id, filename }: DocumentRowProps) {
+  const router = useRouter();
   const selectedDocumentIds = useApplicationStore(
     (state) => state.selectedDocumentIds,
   );
@@ -23,12 +27,38 @@ export default function DocumentRow({ id, filename }: DocumentRowProps) {
 
   const checked = selectedDocumentIds.includes(id);
   const [popoverOpen, setPopoverOpen] = useState(false);
-
+  const [isDeleting, setIsDeleting] = useState(false);
   const [activeDialog, setActiveDialog] = useState<DocumentDialogTypes>(null);
+  const [errMsg, setErrMsg] = useState<string | null>(null);
 
   function openDialog(dialog: DocumentDialogTypes) {
+    setErrMsg(null);
     setPopoverOpen(false);
     setActiveDialog(dialog);
+  }
+
+  function cancelDialog() {
+    setActiveDialog(null);
+    setIsDeleting(false);
+  }
+
+  async function deleteDocument() {
+    setErrMsg(null);
+    setIsDeleting(true);
+    try {
+      await deleteDocumentById(id);
+      setActiveDialog(null);
+      router.refresh();
+    } catch (error) {
+      setErrMsg("Error deleting document. Try again!");
+      if (error instanceof ApiError) {
+        console.error(`Error deleting document ${id}`, error);
+        return;
+      }
+      console.error(`Unexpected error deleting document ${id}`, error);
+    } finally {
+      setIsDeleting(false);
+    }
   }
 
   return (
@@ -44,7 +74,6 @@ export default function DocumentRow({ id, filename }: DocumentRowProps) {
           </PopoverTrigger>
         </label>
         <DocumentRowPopover
-          closePopover={() => setPopoverOpen(false)}
           onDeleteDocument={() => openDialog("delete")}
           onViewMarkdown={() => openDialog("view")}
           filename={filename}
@@ -57,7 +86,13 @@ export default function DocumentRow({ id, filename }: DocumentRowProps) {
           if (!open) setActiveDialog(null);
         }}
       >
-        <DeleteDocumentDialog />
+        <DeleteDocumentDialog
+          isDeleting={isDeleting}
+          onDelete={deleteDocument}
+          onCancel={cancelDialog}
+          filename={filename}
+          errMsg={errMsg}
+        />
       </Dialog>
 
       <Dialog

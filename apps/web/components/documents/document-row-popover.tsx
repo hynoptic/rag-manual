@@ -6,7 +6,6 @@ import { PopoverContent } from "../ui/popover";
 type DocumentRowPopoverProps = {
   filename: string;
   id: string;
-  closePopover: () => void;
   onDeleteDocument: () => void;
   onViewMarkdown: () => void;
 };
@@ -17,7 +16,6 @@ const popoverLargeIconProps = { size: 16 };
 export default function DocumentRowPopover({
   filename,
   id,
-  closePopover,
   onViewMarkdown,
   onDeleteDocument,
 }: DocumentRowPopoverProps) {
@@ -49,17 +47,7 @@ export default function DocumentRowPopover({
       setConfirmCopyFilename(false);
     }, 125);
   }
-
-  // const deleteDocument = (id: string) => {
-  //   closePopover();
-  //   console.log("// delete", id);
-  // };
-
-  // const showDocument = (id: string) => {
-  //   closePopover();
-  //   console.log("// show", id);
-  // };
-
+  
   return (
     <PopoverContent className="dark w-fit px-2 py-1" side="right">
       <PopoverPrimitive.Arrow />
