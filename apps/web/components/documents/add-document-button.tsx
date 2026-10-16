@@ -7,6 +7,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { createClient } from "@/lib/supabase/client";
 import { postgresChangesFilter } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 
 type ParseJobStatus = "queued" | "processing" | "completed" | "failed";
 
@@ -29,6 +30,7 @@ type ParseJob = {
 
 export default function AddDocumentButton() {
   const supabase = useMemo(() => createClient(), []);
+  const router = useRouter();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -55,11 +57,11 @@ export default function AddDocumentButton() {
           filter: postgresChangesFilter().eq("id", jobId),
         },
         (payload) => {
-          console.log(payload);
           const job = payload.new as ParseJob;
           if (job.status === "completed") {
             setProgressMsg("Completed");
             setJobId(null);
+            router.refresh()
           }
           if (job.status === "failed") {
             setErrMsg("Processing failed");

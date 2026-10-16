@@ -1,4 +1,4 @@
-import { getDocuments } from "@/lib/api/documents";
+import { getDocuments } from "@/lib/api/documents.server";
 import DocumentRow from "./document-row";
 
 export default async function Documents() {

@@ -17,26 +17,32 @@ export type Database = {
       documents: {
         Row: {
           created_at: string
+          deleted_at: string | null
           filename: string
           id: string
           parsed_s3_key: string | null
           source_s3_key: string
+          updated_at: string | null
           user_id: string
         }
         Insert: {
           created_at?: string
+          deleted_at?: string | null
           filename: string
           id?: string
           parsed_s3_key?: string | null
           source_s3_key: string
+          updated_at?: string | null
           user_id: string
         }
         Update: {
           created_at?: string
+          deleted_at?: string | null
           filename?: string
           id?: string
           parsed_s3_key?: string | null
           source_s3_key?: string
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: []
