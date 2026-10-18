@@ -9,7 +9,7 @@ import { useState } from "react";
 import { Dialog } from "../ui/dialog";
 import DeleteDocumentDialog from "./delete-document-dialog";
 import DocumentRowPopover from "./document-row-popover";
-import ViewMarkdownDialog from "./view-markdown-document";
+import ViewMarkdownDialog from "./view-markdown-dialog";
 import { deleteDocumentById } from "@/lib/api/documents.client";
 import { useRouter } from "next/navigation";
 import { ApiError } from "@/lib/api/client";
@@ -101,7 +101,7 @@ export default function DocumentRow({ id, filename }: DocumentRowProps) {
           if (!open) setActiveDialog(null);
         }}
       >
-        <ViewMarkdownDialog />
+        <ViewMarkdownDialog id={id} open={activeDialog === "view"} />
       </Dialog>
     </>
   );

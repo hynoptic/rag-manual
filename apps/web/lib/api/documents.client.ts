@@ -1,5 +1,5 @@
 import { clientApiFetch } from "./client";
-import { DeleteDocumentResponse } from "./types";
+import { DeleteDocumentResponse, DocumentMarkdownResponse } from "./types";
 
 export function deleteDocumentById(id: string) {
   return clientApiFetch<DeleteDocumentResponse>(`/api/documents/${id}`, {
@@ -7,3 +7,8 @@ export function deleteDocumentById(id: string) {
   });
 }
 
+export function getDocumentMarkdown(id: string) {
+  return clientApiFetch<DocumentMarkdownResponse>(
+    `/api/documents/${id}/markdown`,
+  );
+}

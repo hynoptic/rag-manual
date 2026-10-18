@@ -20,6 +20,10 @@ export type ChatResponse = {
 
 export type DeleteDocumentResponse = Document;
 
+export type DocumentMarkdownResponse = {
+  markdown: string;
+};
+
 export type DocumentsResponse = Document[];
 
 export type ProfileResponse = Profile;
