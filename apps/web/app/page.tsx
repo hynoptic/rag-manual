@@ -10,7 +10,7 @@ export default function Home() {
           <MyCorporaIcon size={60} />
           MyCorpora
         </h1>
-        <h3>Focus mode for creative people</h3>
+        <h3>Reducing friction for creative people</h3>
         <p>
           Ask questions of a library of reference material curated by you.
           <br />
