@@ -3,9 +3,7 @@
 import { CloudAlert, CloudCheck, CloudUpload } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "../ui/button";
-import {
-  DialogFooter
-} from "../ui/dialog";
+import { DialogFooter } from "../ui/dialog";
 
 import { Spinner } from "@/components/ui/spinner";
 import { ApiError, clientApiFetch } from "@/lib/api/client";
@@ -33,7 +31,13 @@ type ParseJob = {
   completed_at: string | null;
 };
 
-export default function UploadFileTab({ onClose }: { onClose: () => void }) {
+export default function UploadFileTab({
+  onClose,
+  onBusyChange,
+}: {
+  onClose: () => void;
+  onBusyChange: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   // file selection state
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -54,6 +58,12 @@ export default function UploadFileTab({ onClose }: { onClose: () => void }) {
     if (file.type !== "application/pdf") return;
     setFile(file);
   }
+
+  // busy
+  const isProcessing = jobStatus === "queued" || jobStatus === "processing";
+  useEffect(() => {
+    onBusyChange(isUploading || isProcessing);
+  }, [isUploading, isProcessing, onBusyChange]);
 
   function handleDrop(event: React.DragEvent<HTMLDivElement>) {
     event.preventDefault();
@@ -162,7 +172,6 @@ export default function UploadFileTab({ onClose }: { onClose: () => void }) {
     }
   };
 
-  const isProcessing = jobStatus === "queued" || jobStatus === "processing";
   const buttonlabel = isUploading
     ? "Cancel Upload"
     : isProcessing
