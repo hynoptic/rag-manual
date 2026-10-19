@@ -4,7 +4,7 @@ import { MyCorporaIcon } from "@/components/utils/my-corpora-icon";
 export default function Home() {
   return (
     <main className="flex h-screen flex-col">
-      <Header noLogo />
+      <Header noLogo={true} />
       <section className="prose mx-auto flex h-[calc(100vh-8rem)] flex-col items-center justify-center text-center">
         <h1 className="flex items-center gap-2">
           <MyCorporaIcon size={60} />

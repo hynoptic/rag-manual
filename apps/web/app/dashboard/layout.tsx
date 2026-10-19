@@ -11,7 +11,7 @@ export default function DashboardLayout({
   return (
     <main className="flex flex-col gap-2">
       <Suspense fallback={<Loading/>}>
-        <Header />
+        <Header noLogo={false}/>
       </Suspense>
       <section className="w-full p-5">{children}</section>
     </main>
