@@ -101,7 +101,7 @@ export default function DocumentRow({ id, filename }: DocumentRowProps) {
           if (!open) setActiveDialog(null);
         }}
       >
-        <ViewMarkdownDialog id={id} open={activeDialog === "view"} />
+        <ViewMarkdownDialog filename={filename} id={id} open={activeDialog === "view"} />
       </Dialog>
     </>
   );
