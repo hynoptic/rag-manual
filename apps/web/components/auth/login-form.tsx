@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { MyCorporaIcon } from "../utils/my-corpora-icon";
 
 export function LoginForm({
   className,
@@ -96,7 +97,8 @@ export function LoginForm({
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
               <Link
-                href="/auth/sign-up"
+                // href="/auth/sign-up"
+                href="/"
                 className="underline underline-offset-4"
               >
                 Sign up
