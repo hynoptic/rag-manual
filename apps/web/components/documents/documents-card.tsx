@@ -16,8 +16,13 @@ import {
 import Loading from "../utils/loading";
 import AddDocumentButton from "./add-document-button";
 import Documents from "./documents";
+import { Button } from "../ui/button";
+import { Dialog, DialogTrigger } from "../ui/dialog";
+import AddDocumentDialog from "./add-document-dialog";
+import AddDocumentDialogTrigger from "./add-document-dialog-trigger";
 
 export default function DocumentsCard() {
+
   return (
     <Card className="pb-0">
       <Collapsible defaultOpen className="">
@@ -41,7 +46,7 @@ export default function DocumentsCard() {
             </Suspense>
           </CardContent>
           <CardFooter className="py-6 group-data-[state=closed]:hidden">
-            <AddDocumentButton />
+            <AddDocumentDialogTrigger/>
           </CardFooter>
         </CollapsibleContent>
       </Collapsible>
