@@ -17,7 +17,6 @@ export default function AddDocumentDialogTrigger() {
       <DialogTrigger asChild>
         <Button variant="outline">Add Document</Button>
       </DialogTrigger>
-
       <AddDocumentDialog onClose={onClose}/>
     </Dialog>
   );
