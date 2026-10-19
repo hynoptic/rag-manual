@@ -14,12 +14,8 @@ import {
   CollapsibleTrigger,
 } from "../ui/collapsible";
 import Loading from "../utils/loading";
-import AddDocumentButton from "./add-document-button";
-import Documents from "./documents";
-import { Button } from "../ui/button";
-import { Dialog, DialogTrigger } from "../ui/dialog";
-import AddDocumentDialog from "./add-document-dialog";
 import AddDocumentDialogTrigger from "./add-document-dialog-trigger";
+import Documents from "./documents";
 
 export default function DocumentsCard() {
 
