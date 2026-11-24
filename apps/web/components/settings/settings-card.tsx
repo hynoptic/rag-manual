@@ -1,28 +1,18 @@
 import { ChevronDown } from "lucide-react";
-import { Suspense } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "../ui/collapsible";
-import Loading from "../utils/loading";
-import PromptModeSetting from "./prompt-mode-setting";
 import AllowWebSearch from "./allow-web-search";
-import { Separator } from "../ui/separator";
+import PromptModeSetting from "./prompt-mode-setting";
 
 export default function SettingsCard() {
   return (
-    <Card className="pb-0">
-      <Collapsible defaultOpen className="">
-        <CardHeader className="pb-4">
+    <Card className="pb-0 border-0 shadow-none">
+      <Collapsible defaultOpen={false} className="">
+        <CardHeader className="pl-0 border-none">
           <CollapsibleTrigger className="group flex w-full items-center justify-between text-left">
             <div className="flex flex-col gap-2 w-full">
               <CardTitle className="flex justify-between items-center">
@@ -33,9 +23,9 @@ export default function SettingsCard() {
           </CollapsibleTrigger>
         </CardHeader>
         <CollapsibleContent className="">
-          <CardContent className="py-4 pb-4 /border-t max-h-[12.25rem] overflow-y-auto flex flex-col gap-4">
+          <CardContent className="py-4 pb-4 pl-0 max-h-[12.25rem] overflow-y-auto flex flex-col gap-4">
             <PromptModeSetting />
-            <Separator />
+            {/* <Separator /> */}
             <AllowWebSearch />
           </CardContent>
         </CollapsibleContent>

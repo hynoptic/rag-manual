@@ -27,7 +27,7 @@ export default function PromptModeSetting() {
         <div className="flex items-center gap-3">
           <RadioGroupItem disabled={true} value="rag" id="prompt-rag" />
           <Label className="opacity-50" htmlFor="prompt-rag">
-            RAG (coming soon)
+            RAG
           </Label>
         </div>
       </RadioGroup>

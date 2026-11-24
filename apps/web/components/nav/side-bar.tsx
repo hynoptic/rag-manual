@@ -4,7 +4,7 @@ import SettingsCard from "../settings/settings-card";
 
 export default function SideBar() {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col">
       <DocumentsCard />
       <CorporaCard />
       <SettingsCard />

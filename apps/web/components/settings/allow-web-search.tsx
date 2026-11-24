@@ -9,8 +9,10 @@ export default function AllowWebSearch() {
     (state) => state.setAllowWebSearch,
   );
 
-  return (<div className="flex items-center justify-between gap-2">
+  return (
+    <div className="flex items-center justify-between gap-2">
       <p className="text-muted-foreground">Allow Web Search</p>
-    <Switch checked={allowWebSearch} onCheckedChange={setAllowWebSearch} /></div>
+      <Switch checked={allowWebSearch} onCheckedChange={setAllowWebSearch} />
+    </div>
   );
 }

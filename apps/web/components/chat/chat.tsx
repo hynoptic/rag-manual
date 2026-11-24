@@ -15,6 +15,7 @@ import remarkGfm from "remark-gfm";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Textarea } from "../ui/textarea";
+import { Sting } from "./sting";
 
 export type ChatRequestMessage = {
   role: "user" | "assistant";
@@ -33,6 +34,7 @@ type ChatMessage = ChatRequestMessage & {
 
 export function Chat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [showTyping, setShowTyping] = useState(false);
   const [prompt, setPrompt] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -59,6 +61,8 @@ export function Chat() {
     if (!content) {
       return;
     }
+
+    setShowTyping(true);
 
     const nextMessages = [
       ...messages,
@@ -103,6 +107,7 @@ export function Chat() {
           content: response.reply,
         },
       ]);
+      setShowTyping(false);
     } catch (error) {
       if (error instanceof ApiError) {
         console.error(error.status, error.data);
@@ -115,24 +120,29 @@ export function Chat() {
     <Card className="flex h-full min-h-0 flex-col">
       <CardContent className="min-h-0 flex-1 overflow-hidden">
         <div className="h-full overflow-y-auto">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={
-                message.role === "user"
-                  ? "ml-auto max-w-[80%] rounded-xl bg-muted px-4 py-3 mb-4 whitespace-pre-wrap"
-                  : "mr-auto max-w-[80%] px-4 py-3 mb-4 whitespace-pre-wrap"
-              }
-            >
-              {message.role === "user" ? (
-                message.content
-              ) : (
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {message.content}
-                </ReactMarkdown>
-              )}
-            </div>
-          ))}
+          {messages.length > 0 ? (
+            messages.map((message) => (
+              <div
+                key={message.id}
+                className={
+                  message.role === "user"
+                    ? "ml-auto max-w-[80%] rounded-xl bg-muted px-4 py-3 mb-4 whitespace-pre-wrap"
+                    : "mr-auto max-w-[80%] px-4 py-3 mb-4 whitespace-pre-wrap"
+                }
+              >
+                {message.role === "user" ? (
+                  message.content
+                ) : (
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {message.content}
+                  </ReactMarkdown>
+                )}
+              </div>
+            ))
+          ) : (
+            <Sting />
+          )}
+          {showTyping && <TypingIndicator />}
           <div ref={messagesEndRef} />
         </div>
       </CardContent>
@@ -185,5 +195,15 @@ export function Chat() {
         </form>
       </CardFooter>
     </Card>
+  );
+}
+
+export function TypingIndicator() {
+  return (
+    <div className="flex items-center gap-1">
+      <span className="size-2 animate-bounce rounded-full bg-muted-foreground/30 [animation-delay:-0.3s]" />
+      <span className="size-2 animate-bounce rounded-full bg-muted-foreground/30 [animation-delay:-0.15s]" />
+      <span className="size-2 animate-bounce rounded-full bg-muted-foreground/30" />
+    </div>
   );
 }
