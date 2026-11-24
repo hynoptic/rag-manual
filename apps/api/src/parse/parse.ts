@@ -1,13 +1,13 @@
-import { s3 } from "../lib/s3.js";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
+import LlamaCloud from "@llamaindex/llama-cloud";
+import type { Database } from "@rag-manual/database";
+import { createClient } from "@supabase/supabase-js";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { pipeline } from "node:stream/promises";
 import { Readable } from "node:stream";
-import LlamaCloud from "@llamaindex/llama-cloud";
-import { createClient } from "@supabase/supabase-js";
-import type { Database } from "@rag-manual/database";
+import { pipeline } from "node:stream/promises";
+import { s3 } from "../lib/s3.js";
 
 const supabase = createClient<Database>(
   process.env.SUPABASE_URL!,
@@ -46,7 +46,13 @@ export async function parseDocument(documentId: string) {
     throw new Error("S3 object has no body");
   }
 
-  const tempPath = path.join(os.tmpdir(), `${crypto.randomUUID()}.pdf`);
+  const extension = path.extname(document.source_s3_key).toLowerCase();
+
+  if (![".pdf", ".docx"].includes(extension)) {
+    throw new Error(`Unsupported document type: ${extension}`);
+  }
+
+  const tempPath = path.join(os.tmpdir(), `${crypto.randomUUID()}${extension}`);
 
   try {
     await pipeline(object.Body as Readable, fs.createWriteStream(tempPath));

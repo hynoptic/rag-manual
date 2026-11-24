@@ -1,11 +1,11 @@
 "use client";
 
-import { TriangleAlert } from "lucide-react";
+// import { TriangleAlert } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import {
   DialogContent,
-  DialogDescription,
+  // DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -39,10 +39,10 @@ export default function DeleteDocumentDialog({
     >
       <DialogHeader>
         <DialogTitle>Delete Document</DialogTitle>
-        <DialogDescription className="border-b pb-4 mb-2">
+        {/* <DialogDescription className="border-b pb-4 mb-2">
           Lorem ipsum dolor sit amet consectetur adipiscing elit distinctio nisi
           iusto dolor dolor do pariatur vero.
-        </DialogDescription>
+        </DialogDescription> */}
         <div className="text-muted-foreground flex flex-col gap-4 border-b pb-4 mb-2">
           <p>
             You are deleting the following document. This action cannot be

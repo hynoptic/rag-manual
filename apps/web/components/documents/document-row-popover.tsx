@@ -1,3 +1,4 @@
+import { useProfileStore } from "@/providers/profile-provider";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { Check, Copy, ExternalLink, Trash } from "lucide-react";
 import { useRef, useState } from "react";
@@ -25,6 +26,7 @@ export default function DocumentRowPopover({
   const timeoutCopyFilenameRef = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
+  const isAdmin = useProfileStore((state) => state.role === "admin");
 
   async function copyIdToClipboard(text: string) {
     await navigator.clipboard.writeText(text);
@@ -47,7 +49,7 @@ export default function DocumentRowPopover({
       setConfirmCopyFilename(false);
     }, 125);
   }
-  
+
   return (
     <PopoverContent className="dark w-fit px-2 py-1" side="right">
       <PopoverPrimitive.Arrow />
@@ -75,18 +77,20 @@ export default function DocumentRowPopover({
           )}
         </span>
       </p>
-      <p className="text-muted-foreground flex gap-2 items-center select-none">
-        {id}
-        {confirmCopyId ? (
-          <Check {...popoverSmallIconProps} className="pointer-events-none" />
-        ) : (
-          <Copy
-            onClick={() => copyIdToClipboard(id)}
-            {...popoverSmallIconProps}
-            className="cursor-pointer"
-          />
-        )}
-      </p>
+      {isAdmin && (
+        <p className="text-muted-foreground flex gap-2 items-center select-none">
+          {id}
+          {confirmCopyId ? (
+            <Check {...popoverSmallIconProps} className="pointer-events-none" />
+          ) : (
+            <Copy
+              onClick={() => copyIdToClipboard(id)}
+              {...popoverSmallIconProps}
+              className="cursor-pointer"
+            />
+          )}
+        </p>
+      )}
     </PopoverContent>
   );
 }

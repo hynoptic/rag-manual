@@ -1,10 +1,10 @@
-import { Router } from "express";
-import multer from "multer";
-import { sleep } from "../lib/utils.js";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { s3 } from "../lib/s3.js";
+import { Router } from "express";
 import fs from "fs";
+import multer from "multer";
 import { getAuthContext } from "../lib/auth.js";
+import { s3 } from "../lib/s3.js";
+import { sleep } from "../lib/utils.js";
 
 const router = Router();
 
@@ -14,8 +14,13 @@ const upload = multer({
     fileSize: 50 * 1024 * 1024,
   },
   fileFilter: (_req, file, callback) => {
-    if (file.mimetype !== "application/pdf") {
-      callback(new Error("Only PDF files are supported"));
+    const allowedTypes = [
+      "application/pdf",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
+
+    if (!allowedTypes.includes(file.mimetype)) {
+      callback(new Error("Only PDF and DOCX files are supported"));
       return;
     }
 
@@ -52,7 +57,14 @@ router.post("/", upload.single("file"), async (req, res) => {
     }
 
     const documentId = crypto.randomUUID();
-    const sourceKey = `documents/${documentId}/source.pdf`;
+
+    const extensions: Record<string, string> = {
+      "application/pdf": "pdf",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        "docx",
+    };
+    const extension = extensions[req.file.mimetype];
+    const sourceKey = `documents/${documentId}/source.${extension}`;
 
     await s3.send(
       new PutObjectCommand({

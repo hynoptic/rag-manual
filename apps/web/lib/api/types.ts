@@ -1,5 +1,5 @@
 import { PromptMode } from "../stores/application-store";
-import type { Document, Profile } from "@rag-manual/database";
+import type { Document, ProfileRow } from "@rag-manual/database";
 
 export type UsageResponse = {
   tokenCount: number;
@@ -26,4 +26,10 @@ export type DocumentMarkdownResponse = {
 
 export type DocumentsResponse = Document[];
 
-export type ProfileResponse = Profile;
+export type Profile = {
+  id: ProfileRow["id"];
+  createdAt: ProfileRow["created_at"];
+  firstName: ProfileRow["first_name"];
+  lastName: ProfileRow["last_name"];
+  role: ProfileRow["role"];
+};

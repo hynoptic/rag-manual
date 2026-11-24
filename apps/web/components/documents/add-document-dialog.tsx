@@ -43,15 +43,14 @@ export default function AddDocumentDialog({
       <DialogHeader>
         <DialogTitle>Add Document</DialogTitle>
         <DialogDescription>
-          Lorem ipsum dolor sit amet consectetur adipiscing elit distinctio nisi
-          iusto dolor dolor do pariatur vero.
+          Add a file, website or YouTube URL for processing
         </DialogDescription>
       </DialogHeader>
 
       <Tabs defaultValue="file" className="w-full">
         <TabsList className="w-full mb-2">
           <TabsTrigger value="file" className="flex-1" disabled={isBusy}>
-            Uplaod File
+            Upload File
           </TabsTrigger>
           <TabsTrigger value="website" className="flex-1" disabled={isBusy}>
             Scrape Website

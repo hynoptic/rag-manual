@@ -30,11 +30,7 @@ router.get("/", async (req, res) => {
       });
     }
 
-    return res.json({
-      firstName: data.first_name,
-      lastName: data.last_name,
-      role: data.role,
-    });
+    return res.json(data);
   } catch (error) {
     console.error(error);
 

@@ -55,7 +55,12 @@ export default function UploadFileTab({
   // file selection handlers
   function handleFileSelection(file: File) {
     if (isFileSelectionDisabled) return;
-    if (file.type !== "application/pdf") return;
+    const allowedTypes = [
+      "application/pdf",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
+
+    if (!allowedTypes.includes(file.type)) return;
     setFile(file);
   }
 
@@ -224,7 +229,7 @@ export default function UploadFileTab({
           <p className="text-sm font-medium">{file.name}</p>
         ) : (
           <>
-            <p className="text-sm font-medium">Drag and drop a PDF here</p>
+            <p className="text-sm font-medium">Drag and drop a .pdf or .docx file here</p>
             <p className="text-xs text-muted-foreground">or click to browse</p>
           </>
         )}
@@ -232,7 +237,7 @@ export default function UploadFileTab({
         <input
           ref={fileInputRef}
           type="file"
-          accept="application/pdf"
+          accept=".pdf,.docx"
           disabled={isFileSelectionDisabled}
           className="hidden"
           onChange={(event) => {
