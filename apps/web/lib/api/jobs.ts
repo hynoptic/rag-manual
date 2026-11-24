@@ -1,8 +1,8 @@
-import { ParseJob } from "@rag-manual/database";
+import { ParseJobRow } from "@rag-manual/database";
 import { apiFetch } from "./fetch";
 
 export async function getJobs() {
-  const jobs = await apiFetch<ParseJob[]>("/api/jobs");
+  const jobs = await apiFetch<ParseJobRow[]>("/api/jobs");
   return jobs.map((job) => ({
     id: job.id,
     status: job.status,
