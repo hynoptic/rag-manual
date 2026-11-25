@@ -15,7 +15,7 @@ export default function AddDocumentDialogTrigger() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Add Document</Button>
+        <Button variant="outline" className="text-sm text-muted-foreground">Add Document</Button>
       </DialogTrigger>
       <AddDocumentDialog onClose={onClose}/>
     </Dialog>

@@ -10,9 +10,9 @@ import PromptModeSetting from "./prompt-mode-setting";
 
 export default function SettingsCard() {
   return (
-    <Card className="pb-0 border-0 shadow-none">
+    <Card className="pb-0 border-0 shadow-none bg-transparent">
       <Collapsible defaultOpen={false} className="">
-        <CardHeader className="pl-0 border-none">
+        <CardHeader className="border-none">
           <CollapsibleTrigger className="group flex w-full items-center justify-between text-left">
             <div className="flex flex-col gap-2 w-full">
               <CardTitle className="flex justify-between items-center">
@@ -23,7 +23,7 @@ export default function SettingsCard() {
           </CollapsibleTrigger>
         </CardHeader>
         <CollapsibleContent className="">
-          <CardContent className="py-4 pb-4 pl-0 max-h-[12.25rem] overflow-y-auto flex flex-col gap-4">
+          <CardContent className="pt-4 pb-4 max-h-49 overflow-y-auto flex flex-col gap-4">
             <PromptModeSetting />
             {/* <Separator /> */}
             <AllowWebSearch />

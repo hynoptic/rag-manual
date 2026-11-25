@@ -20,9 +20,9 @@ import Documents from "./documents";
 export default function DocumentsCard() {
 
   return (
-    <Card className="pb-0 border-0 pt-0">
+    <Card className="border-0 shadow-none bg-transparent -ml-1 pb-0">
       <Collapsible defaultOpen className="">
-        <CardHeader className="pb-4 pl-0">
+        <CardHeader className="pb-4">
           <CollapsibleTrigger className="group flex w-full items-center justify-between text-left">
             <div className="flex flex-col gap-2 w-full">
               <CardTitle className="flex justify-between items-center">
@@ -35,15 +35,15 @@ export default function DocumentsCard() {
             </div>
           </CollapsibleTrigger>
         </CardHeader>
-        <CollapsibleContent className="border-1 border-muted-foreground">
-          <CardContent className="pl-0 max-h-[12.25rem] overflow-y-auto">
+        <CollapsibleContent className="border/ border-muted-foreground">
+          <CardContent className="max-h-48 overflow-y-auto">
           <div className="border p-2 rounded-lg">
             <Suspense fallback={<Loading text="Documents" />}>
               <Documents />
             </Suspense>
             </div>
           </CardContent>
-          <CardFooter className="pl-0 py-6 group-data-[state=closed]:hidden">
+          <CardFooter className="pt-6 group-data-[state=closed]:hidden">
             <AddDocumentDialogTrigger/>
           </CardFooter>
         </CollapsibleContent>

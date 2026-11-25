@@ -8,13 +8,13 @@ export default async function AdminPage() {
   const profile = await getProfile();
 
   if (profile.role !== "admin") {
-    redirect("/dashboard");
+    redirect("/chat");
   }
 
   const jobs = await getJobs();
 
   return (
-    <section className="flex h-[calc(100vh-8rem)] min-h-0 flex-col gap-4">
+    <section className="flex h-[calc(100vh)] min-h-0 flex-col gap-4  p-8 pt-0">
       <Jobs jobs={jobs as ParseJob[]} />
     </section>
   );

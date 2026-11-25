@@ -169,7 +169,7 @@ export function Chat() {
             }}
             placeholder="Ask a question..."
             rows={1}
-            className="!text-base min-h-10 max-h-40 flex-1 resize-none overflow-y-auto focus-visible:border-input focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:shadow-none"
+            className="text-base! min-h-10 max-h-40 flex-1 resize-none overflow-y-auto focus-visible:border-input focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:shadow-none"
           />
 
           <Button
@@ -178,7 +178,7 @@ export function Chat() {
             variant="ghost"
             disabled={!prompt.trim()}
             aria-label="Send message"
-            className="shrink-0 size-12 [&_svg]:!size-6"
+            className="shrink-0 size-12 [&_svg]:size-6!"
           >
             <SendIcon className="shrink-0 text-muted-foreground" />
           </Button>
@@ -187,7 +187,7 @@ export function Chat() {
             // size="icon"
             variant="ghost"
             aria-label="Send message"
-            className="shrink-0 size-12 [&_svg]:!size-6"
+            className="shrink-0 size-12 [&_svg]:size-6!"
             onClick={() => setMessages([])}
           >
             <RotateCcwIcon className="shrink-0 text-muted-foreground" />

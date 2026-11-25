@@ -11,7 +11,7 @@ export default function AllowWebSearch() {
 
   return (
     <div className="flex items-center justify-between gap-2">
-      <p className="text-muted-foreground">Allow Web Search</p>
+      <p className="text-muted-foreground text-sm">Allow Web Search</p>
       <Switch checked={allowWebSearch} onCheckedChange={setAllowWebSearch} />
     </div>
   );

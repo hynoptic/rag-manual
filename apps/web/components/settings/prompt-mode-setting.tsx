@@ -13,7 +13,7 @@ export default function PromptModeSetting() {
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-muted-foreground">Prompt with</p>
+      <p className="text-muted-foreground text-sm">Prompt with</p>
       <RadioGroup
         value={promptMode}
         onValueChange={(value) => setPromptMode(value as PromptMode)}

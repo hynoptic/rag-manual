@@ -11,7 +11,7 @@ export function ProfileProvider({
   profile,
   children,
 }: {
-  profile: Profile;
+  profile: Profile & {email: string};
   children: React.ReactNode;
 }) {
   const [store] = useState(() => createProfileStore(profile));
@@ -24,7 +24,7 @@ export function ProfileProvider({
 }
 
 export function useProfileStore<T>(
-  selector: (state: Profile) => T,
+  selector: (state: Profile & {email: string}) => T,
 ): T {
   const store = useContext(ProfileContext);
 

@@ -51,7 +51,7 @@ export default function DocumentRowPopover({
   }
 
   return (
-    <PopoverContent className="dark w-fit px-2 py-1" side="right">
+    <PopoverContent className="bg-foreground text-background border-foreground w-fit px-2 py-1" side="right">
       <PopoverPrimitive.Arrow />
       <p className="select-none text-base flex gap-2 items-center">
         {filename}

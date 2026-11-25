@@ -14,9 +14,9 @@ import {
 
 export default function CorporaCard() {
   return (
-    <Card className="pb-0 border-0">
+    <Card className="pb-0 border-0 shadow-none bg-transparent">
       <Collapsible defaultOpen={false} className="">
-        <CardHeader className="pb-4 pl-0">
+        <CardHeader className="pb-4">
           <CollapsibleTrigger className="group flex w-full items-center justify-between text-left">
             <div className="flex flex-col gap-2 w-full">
               <CardTitle className="flex justify-between items-center">
@@ -30,7 +30,7 @@ export default function CorporaCard() {
           </CollapsibleTrigger>
         </CardHeader>
         <CollapsibleContent className="">
-          <CardContent className="pb-4 pl-0 max-h-[12.25rem] overflow-y-auto">
+          <CardContent className="pb-4 max-h-48 overflow-y-auto">
             {/* <Suspense fallback={<Loading text="Documents" />}>
               corpora
             </Suspense> */}

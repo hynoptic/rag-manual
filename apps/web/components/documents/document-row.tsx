@@ -64,7 +64,7 @@ export default function DocumentRow({ id, filename }: DocumentRowProps) {
   return (
     <>
       <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-        <label className="flex items-center gap-2 p-1">
+        <label className="flex items-center gap-2 p-1 text-sm">
           <Checkbox
             checked={checked}
             onCheckedChange={() => toggleDocument(id)}
