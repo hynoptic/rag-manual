@@ -36,7 +36,7 @@ export default function DocumentsCard() {
           </CollapsibleTrigger>
         </CardHeader>
         <CollapsibleContent className="border/ border-muted-foreground">
-          <CardContent className="max-h-48 overflow-y-auto">
+          <CardContent className="max-h-64 overflow-y-auto">
           <div className="border p-2 rounded-lg">
             <Suspense fallback={<Loading text="Documents" />}>
               <Documents />
